@@ -1,0 +1,364 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Social Network Analysis - Digital Currency",
+      "provenance": [],
+      "authorship_tag": "ABX9TyPCCMay+eQC6Sl88RraY3Mm",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/andrybrew/bi-15-maret/blob/main/Social_Network_Analysis_Digital_Currency.ipynb\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "iPAaP3ldmScI"
+      },
+      "source": [
+        "## **Social Network Analysis**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "b6v1llWX1ybs"
+      },
+      "source": [
+        "### **Install and Load Packages**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "rwoOf1XPgUD-"
+      },
+      "source": [
+        "# Load Packages\r\n",
+        "import pandas as pd\r\n",
+        "import networkx as nx\r\n",
+        "import matplotlib.pyplot as plt\r\n",
+        "import warnings"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "K7LWsW0KmDL9"
+      },
+      "source": [
+        "# Set Parameter\r\n",
+        "warnings.filterwarnings('ignore')"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "POd_N1Vx18Ft"
+      },
+      "source": [
+        "### **Import Data**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "XtNh7ePngsJT"
+      },
+      "source": [
+        "# Import Edge List Data\r\n",
+        "df = pd.read_csv(\"https://raw.githubusercontent.com/andrybrew/digital-currency/main/data/tweet-network-2.csv\", delimiter= \";\")\r\n",
+        "df.head()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "-JwG6yBQmHtC"
+      },
+      "source": [
+        "# Contstruct Network\r\n",
+        "G = nx.from_pandas_edgelist(df)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "CQYpsk0Alnid"
+      },
+      "source": [
+        "plt.figure(figsize=(50,50))\r\n",
+        "\r\n",
+        "# Mempvisualisasikan Network\r\n",
+        "nx.draw(G, with_labels=True, \r\n",
+        "        node_color='skyblue', node_size=1200, \r\n",
+        "        arrowstyle='->',arrowsize=20, edge_color='r',\r\n",
+        "        font_size=9,\r\n",
+        "        pos=nx.kamada_kawai_layout(G))\r\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "-XibgWnJBoNL"
+      },
+      "source": [
+        "### **Network Metrics and Measurement**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "q9j8PrQWwUA7"
+      },
+      "source": [
+        "**Network Topology Measurement**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "znadMH2ljhTF"
+      },
+      "source": [
+        "# Show Number of Nodes\r\n",
+        "nx.number_of_nodes(G)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "HTwoQEARjhvj"
+      },
+      "source": [
+        "# Show Number of Edges\r\n",
+        "nx.number_of_edges(G)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "PaSR1r2NjkJj"
+      },
+      "source": [
+        "# Show Graph Density\r\n",
+        "nx.density(G)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "47fv2rgnKShO"
+      },
+      "source": [
+        "**Centrality Measurement**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "wZPEbO6UiKVK"
+      },
+      "source": [
+        "# Degree Centrality\r\n",
+        "degree = nx.degree_centrality(G)\r\n",
+        "\r\n",
+        "# Sorted from the Highest\r\n",
+        "sorted(nx.degree(G), key=lambda x: x[1], reverse=True)[0:10]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "hot2-SMqi7BD"
+      },
+      "source": [
+        "# Betweenness Centrality\r\n",
+        "betweenness = nx.betweenness_centrality(G)\r\n",
+        "\r\n",
+        "# Sorted from the Highest\r\n",
+        "sorted(nx.betweenness_centrality(G, normalized=True).items(), key=lambda x:x[1], reverse=True)[0:10]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "_g8qoJG3i-4X"
+      },
+      "source": [
+        "# Closeness Centrality\r\n",
+        "closeness = nx.closeness_centrality(G)\r\n",
+        "\r\n",
+        "# Sorted from the Highest\r\n",
+        "sorted(nx.closeness_centrality(G).items(), key=lambda x:x[1], reverse=True)[0:10]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "PFrAtNaPjBIw"
+      },
+      "source": [
+        "# Eigenvector Centrality\r\n",
+        "eigenvector = nx.eigenvector_centrality_numpy(G)\r\n",
+        "\r\n",
+        "# Sorted from the Highest\r\n",
+        "sorted(nx.eigenvector_centrality_numpy(G).items(), key=lambda x:x[1], reverse=True)[0:10]"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "D7YhRM2XjJJe"
+      },
+      "source": [
+        "plt.figure(figsize=(50,50))\r\n",
+        "\r\n",
+        "# Set Degree Dictionary\r\n",
+        "d = dict(degree)\r\n",
+        "\r\n",
+        "\r\n",
+        "nx.draw(G, with_labels=True, \r\n",
+        "        node_color='skyblue', nodelist=d.keys(),\r\n",
+        "        node_size=[v * 90000 for v in d.values()], \r\n",
+        "        arrowstyle='->',arrowsize=20, edge_color='r',\r\n",
+        "        font_size=10,\r\n",
+        "        pos=nx.kamada_kawai_layout(G))"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "52AuWdV1BtUZ"
+      },
+      "source": [
+        "### **Community Detection**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "DPq8nalnLduK"
+      },
+      "source": [
+        "**Modularity Community**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "P-zMPpoyjorS"
+      },
+      "source": [
+        "# Import Module\r\n",
+        "from networkx.algorithms.community import greedy_modularity_communities\r\n",
+        "\r\n",
+        "# Modularity Community Detection\r\n",
+        "communities_m = sorted(greedy_modularity_communities(G), key=len, reverse=True)"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "xQl-8rSsjulN"
+      },
+      "source": [
+        "# Set Node Community Function\r\n",
+        "def set_node_community(G, communities_m):\r\n",
+        "      '''Add community to node attributes'''\r\n",
+        "      for c, v_c in enumerate(communities_m):\r\n",
+        "        for v in v_c:\r\n",
+        "          # Add 1 to save 0 for external edges\r\n",
+        "          G.nodes[v]['community'] = c + 1      "
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "BBM-E7KEjyFq"
+      },
+      "source": [
+        "# Set Colour Function\r\n",
+        "def get_color(i, r_off=1, g_off=1, b_off=1):\r\n",
+        "     '''Assign a color to a vertex.'''\r\n",
+        "     r0, g0, b0 = 0, 0, 0\r\n",
+        "     n = 16\r\n",
+        "     low, high = 0.1, 0.9\r\n",
+        "     span = high - low\r\n",
+        "     r = low + span * (((i + r_off) * 3) % n) / (n - 1)\r\n",
+        "     g = low + span * (((i + g_off) * 5) % n) / (n - 1)\r\n",
+        "     b = low + span * (((i + b_off) * 7) % n) / (n - 1)\r\n",
+        "     return (r, g, b) "
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "3_yIPqkpj0a6"
+      },
+      "source": [
+        "# Set Node Communities\r\n",
+        "community = set_node_community(G, communities_m)\r\n",
+        "\r\n",
+        "# Set Node Color\r\n",
+        "node_color = [get_color(G.nodes[v]['community']) for v in G.nodes]\r\n",
+        "\r\n",
+        "# Visualize the Network\r\n",
+        "import matplotlib.pyplot as plt\r\n",
+        "plt.figure(figsize=(50,50))\r\n",
+        "nx.draw(G, with_labels=True, \r\n",
+        "        node_color = node_color, node_size=1200, \r\n",
+        "        arrowstyle='->',arrowsize=20, edge_color='r',\r\n",
+        "        font_size=10, pos=nx.kamada_kawai_layout(G))\r\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
